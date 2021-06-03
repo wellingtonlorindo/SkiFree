@@ -1,0 +1,25 @@
+{
+  "env": {
+    "commonjs": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["airbnb", "prettier", "eslint:recommended"],
+  "plugins": ["prettier"],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 12
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "func-names": "off",
+    "no-process-exit": "off",
+    "class-methods-use-this": "off",
+    "import/no-dynamic-require": "off",
+    "no-unused-expressions": "off",
+    "no-empty-function": "off",
+    "no-underscore-dangle": "off"
+  }
+}

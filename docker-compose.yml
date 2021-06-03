@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  dev:
+    build:
+      context: .
+      target: dev
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/usr/src/app
+    environment:
+      NODE_ENV: development
+      DEBUG: 1
+  prod:
+    build:
+      context: .
+      target: prod
+    ports:
+      - 8081:8080
+    volumes:
+      - .:/usr/src/app
+    environment:
+      NODE_ENV: production
+      DEBUG: 0

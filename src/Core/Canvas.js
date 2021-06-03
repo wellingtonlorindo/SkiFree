@@ -1,45 +1,50 @@
 export class Canvas {
-    x = 0;
-    y = 0;
-    width = 0;
-    height = 0;
-    drawOffset = {
-        x: 0,
-        y: 0
-    };
-    ctx = null;
+  x = 0;
 
-    constructor(width, height) {
-        this.width = width;
-        this.height = height;
+  y = 0;
 
-        this.createCanvas();
-    }
+  width = 0;
 
-    createCanvas() {
-        const canvas = document.getElementById('skiCanvas');
-        canvas.width = this.width * window.devicePixelRatio;
-        canvas.height = this.height * window.devicePixelRatio;
-        canvas.style.width = this.width + 'px';
-        canvas.style.height = this.height + 'px';
+  height = 0;
 
-        this.ctx = canvas.getContext("2d");
-        this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    }
+  drawOffset = {
+    x: 0,
+    y: 0,
+  };
 
-    clearCanvas() {
-        this.ctx.clearRect(this.x, this.y, this.width, this.height);
-    }
+  ctx = null;
 
-    setDrawOffset(x, y) {
-        this.drawOffset.x = x;
-        this.drawOffset.y = y;
-    }
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
 
-    drawImage(image, x, y, width, height) {
-        x -= this.drawOffset.x;
-        y -= this.drawOffset.y;
+    this.createCanvas();
+  }
 
-        this.ctx.drawImage(image, x, y, width, height);
-    }
+  createCanvas() {
+    const canvas = document.getElementById('skiCanvas');
+    canvas.width = this.width * window.devicePixelRatio;
+    canvas.height = this.height * window.devicePixelRatio;
+    canvas.style.width = `${this.width}px`;
+    canvas.style.height = `${this.height}px`;
+
+    this.ctx = canvas.getContext('2d');
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  }
+
+  clearCanvas() {
+    this.ctx.clearRect(this.x, this.y, this.width, this.height);
+  }
+
+  setDrawOffset(x, y) {
+    this.drawOffset.x = x;
+    this.drawOffset.y = y;
+  }
+
+  drawImage(image, x, y, width, height) {
+    x -= this.drawOffset.x;
+    y -= this.drawOffset.y;
+
+    this.ctx.drawImage(image, x, y, width, height);
+  }
 }
