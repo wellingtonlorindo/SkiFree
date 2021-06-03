@@ -13,6 +13,9 @@ export class Skier extends Entity {
     }
 
     setDirection(direction) {
+        if (!Constants.SKIER_DIRECTION_ASSET[direction]) {
+          return;
+        }
         this.direction = direction;
         this.updateAsset();
     }
