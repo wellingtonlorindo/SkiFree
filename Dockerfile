@@ -8,7 +8,7 @@ FROM base as prod
 ENV NODE_ENV=production
 RUN npm i -g webpack webpack-cli
 RUN npm i
-COPY . .
+COPY . .  
 # RUN npm run build
 # COPY . .
 CMD [ "npm", "start" ]
