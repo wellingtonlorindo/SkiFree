@@ -3,18 +3,55 @@ import { AssetManager } from './AssetManager';
 import { Canvas } from './Canvas';
 import { Skier } from '../Entities/Skier';
 import { ObstacleManager } from '../Entities/Obstacles/ObstacleManager';
+import { BoostManager } from '../Entities/Boosts/BoostManager';
 import { Rect } from './Utils';
+import { KeyDownActions } from '../EnumActions';
 
 export class Game {
   gameWindow = null;
 
-  constructor() {
-    this.assetManager = new AssetManager();
-    this.canvas = new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
-    this.skier = new Skier(0, 0);
-    this.obstacleManager = new ObstacleManager();
+  constructor({
+    assetManager,
+    canvas,
+    skier,
+    obstacleManager,
+    boostManager,
+    windowDocument,
+  } = {}) {
+    this.assetManager = assetManager || this.createAssetManager();
+    this.canvas = canvas || this.createCanvas();
+    this.skier = skier || this.createSkier();
+    this.obstacleManager = obstacleManager || this.createObstacleManager();
+    this.boostManager = boostManager || this.createBoostManager();
+    this.windowDocument = windowDocument || document;
 
-    document.addEventListener('keydown', this.handleKeyDown.bind(this));
+    this.windowDocument.addEventListener(
+      'keydown',
+      this.handleKeyDown.bind(this),
+    );
+  }
+
+  createAssetManager() {
+    return new AssetManager();
+  }
+
+  createCanvas() {
+    return new Canvas({
+      width: Constants.GAME_WIDTH,
+      height: Constants.GAME_HEIGHT,
+    });
+  }
+
+  createSkier() {
+    return new Skier({ x: 0, y: 0, assetManager: this.assetManager });
+  }
+
+  createObstacleManager() {
+    return new ObstacleManager({ assetManager: this.assetManager });
+  }
+
+  createBoostManager() {
+    return new BoostManager({ assetManager: this.assetManager });
   }
 
   init() {
@@ -41,8 +78,12 @@ export class Game {
     this.calculateGameWindow();
 
     this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
+    this.boostManager.placeNewBoost(this.gameWindow, previousGameWindow);
 
-    this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+    const obstacles = this.obstacleManager.getObstacles();
+    const boots = this.boostManager.getBoosts();
+    const entities = obstacles.concat(boots);
+    this.skier.checkIfSkierHitSomething(entities, this.assetManager);
   }
 
   drawGameWindow() {
@@ -50,6 +91,7 @@ export class Game {
 
     this.skier.draw(this.canvas, this.assetManager);
     this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
+    this.boostManager.drawBoosts(this.canvas, this.assetManager);
   }
 
   calculateGameWindow() {
@@ -66,23 +108,6 @@ export class Game {
   }
 
   handleKeyDown(event) {
-    switch (event.which) {
-      case Constants.KEYS.LEFT:
-        this.skier.turnLeft();
-        event.preventDefault();
-        break;
-      case Constants.KEYS.RIGHT:
-        this.skier.turnRight();
-        event.preventDefault();
-        break;
-      case Constants.KEYS.UP:
-        this.skier.turnUp();
-        event.preventDefault();
-        break;
-      case Constants.KEYS.DOWN:
-        this.skier.turnDown();
-        event.preventDefault();
-        break;
-    }
+    KeyDownActions.execute(this, event);
   }
 }

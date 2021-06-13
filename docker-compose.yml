@@ -17,7 +17,7 @@ services:
       context: .
       target: prod
     ports:
-      - 8081:8080
+      - 8083:8080
     volumes:
       - .:/usr/src/app
     environment:

@@ -1,6 +1,7 @@
 import * as Constants from '../Constants';
+import { SkierDirectionActions, SkierHitActions } from '../EnumActions';
 import { Entity } from './Entity';
-import { intersectTwoRects, Rect } from '../Core/Utils';
+import { intersectTwoRects, Rect, sleep } from '../Core/Utils';
 
 export class Skier extends Entity {
   assetName = Constants.SKIER_DOWN;
@@ -9,8 +10,12 @@ export class Skier extends Entity {
 
   speed = Constants.SKIER_STARTING_SPEED;
 
-  constructor(x, y) {
-    super(x, y);
+  constructor({ x, y, assetManager }) {
+    super({ x, y, assetManager });
+  }
+
+  getType() {
+    return Constants.ENTITY_TYPES.SKIER;
   }
 
   setDirection(direction) {
@@ -26,17 +31,7 @@ export class Skier extends Entity {
   }
 
   move() {
-    switch (this.direction) {
-      case Constants.SKIER_DIRECTIONS.LEFT_DOWN:
-        this.moveSkierLeftDown();
-        break;
-      case Constants.SKIER_DIRECTIONS.DOWN:
-        this.moveSkierDown();
-        break;
-      case Constants.SKIER_DIRECTIONS.RIGHT_DOWN:
-        this.moveSkierRightDown();
-        break;
-    }
+    SkierDirectionActions.execute(this);
   }
 
   moveSkierLeft() {
@@ -94,30 +89,84 @@ export class Skier extends Entity {
     this.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
   }
 
-  checkIfSkierHitObstacle(obstacleManager, assetManager) {
-    const asset = assetManager.getAsset(this.assetName);
-    const skierBounds = new Rect(
-      this.x - asset.width / 2,
-      this.y - asset.height / 2,
-      this.x + asset.width / 2,
-      this.y - asset.height / 4,
+  async jump({ time = 200, number = 1, speed } = {}) {
+    const jump = Constants.SKIER_JUMPS[`JUMP${number}`];
+    if (!jump) {
+      this.speed = Constants.SKIER_STARTING_SPEED;
+      return this.updateAsset();
+    }
+    if (speed) {
+      this.speed = speed;
+    }
+
+    this.assetName = Constants.SKIER_JUMP_ASSET[jump];
+    await sleep(time);
+    return this.jump({
+      time,
+      number: number + 1,
+      speed,
+    });
+  }
+
+  checkIfItCanBeJumpedOver(obstacle) {
+    const checkSkier = Object.values(Constants.SKIER_JUMP_ASSET).includes(
+      this.getAssetName(),
+    );
+    const checkObstacle = Constants.SKIER_CAN_JUMP_OVER_ASSETS.includes(
+      obstacle.getAssetName(),
     );
 
-    const collision = obstacleManager.getObstacles().find((obstacle) => {
-      const obstacleAsset = assetManager.getAsset(obstacle.getAssetName());
-      const obstaclePosition = obstacle.getPosition();
-      const obstacleBounds = new Rect(
-        obstaclePosition.x - obstacleAsset.width / 2,
-        obstaclePosition.y - obstacleAsset.height / 2,
-        obstaclePosition.x + obstacleAsset.width / 2,
-        obstaclePosition.y,
-      );
+    return checkSkier && checkObstacle;
+  }
 
-      return intersectTwoRects(skierBounds, obstacleBounds);
+  createSkierBounds(asset) {
+    const skierBounds = this.createRect({
+      x: this.x - asset.width / 2,
+      y: this.y - asset.height / 2,
+      width: this.x + asset.width / 2,
+      height: this.y - asset.height / 4,
     });
 
-    if (collision) {
-      this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
+    return skierBounds;
+  }
+
+  createRect({ x, y, width, height }) {
+    return new Rect(x, y, width, height);
+  }
+
+  checkIfSkierTouchedEntities(skierBounds, entities) {
+    const self = this;
+    return entities.find((entity) => {
+      const entityAsset = self.assetManager.getAsset(entity.getAssetName());
+      const entityPosition = entity.getPosition();
+      const entityBounds = self.createRect({
+        x: entityPosition.x - entityAsset.width / 2,
+        y: entityPosition.y - entityAsset.height / 2,
+        width: entityPosition.x + entityAsset.width / 2,
+        height: entityPosition.y,
+      });
+
+      return intersectTwoRects(skierBounds, entityBounds);
+    });
+  }
+
+  getSkierBounds() {
+    const asset = this.assetManager.getAsset(this.getAssetName());
+    if (!asset) {
+      throw new Error('Asset not found.');
+    }
+    return this.createSkierBounds(asset);
+  }
+
+  checkIfSkierHitSomething(entities) {
+    const skierBounds = this.getSkierBounds();
+    const entityTouched = this.checkIfSkierTouchedEntities(
+      skierBounds,
+      entities,
+    );
+
+    if (entityTouched) {
+      SkierHitActions.execute(this, entityTouched);
     }
   }
 }

@@ -14,15 +14,16 @@ export class Canvas {
 
   ctx = null;
 
-  constructor(width, height) {
+  constructor({ width, height, canvasElement }) {
     this.width = width;
     this.height = height;
+    this.canvasElement = canvasElement || null;
 
     this.createCanvas();
   }
 
   createCanvas() {
-    const canvas = document.getElementById('skiCanvas');
+    const canvas = this.canvasElement || document.getElementById('skiCanvas');
     canvas.width = this.width * window.devicePixelRatio;
     canvas.height = this.height * window.devicePixelRatio;
     canvas.style.width = `${this.width}px`;

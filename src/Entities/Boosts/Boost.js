@@ -2,14 +2,9 @@ import * as Constants from '../../Constants';
 import { Entity } from '../Entity';
 import { randomInt } from '../../Core/Utils';
 
-const assetTypes = [
-  Constants.TREE,
-  Constants.TREE_CLUSTER,
-  Constants.ROCK1,
-  Constants.ROCK2,
-];
+const assetTypes = [Constants.JUMP_RAMP];
 
-export class Obstacle extends Entity {
+export class Boost extends Entity {
   constructor({ x, y, assetManager }) {
     super({ x, y, assetManager });
 
@@ -18,6 +13,6 @@ export class Obstacle extends Entity {
   }
 
   getType() {
-    return Constants.ENTITY_TYPES.OBSTACLE;
+    return Constants.ENTITY_TYPES.BOOST;
   }
 }
