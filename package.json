@@ -6,12 +6,11 @@
   "scripts": {
     "dev": "webpack-dev-server --host 0.0.0.0 --mode development",
     "build": "webpack --mode production",
-    "test": "jest",
+    "test": "jest src/Tests",
     "start": "node server.js",
     "heroku-postbuild": "webpack -p",
     "lint": "eslint '**/*.js' --fix --ignore-pattern node_modules/",
-    "prettier": "prettier --check '**/*.js'",
-    "coverage": "nyc --reporter=text npm test"
+    "prettier": "prettier --check '**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -34,7 +33,6 @@
     "husky": "^6.0.0",
     "jest": "^27.0.4",
     "lint-staged": "^10.5.4",
-    "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "sinon": "^10.0.0"
   },
