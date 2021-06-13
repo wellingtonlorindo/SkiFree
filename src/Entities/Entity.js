@@ -5,9 +5,12 @@ export class Entity {
 
   assetName = '';
 
-  constructor(x, y) {
+  assetManager;
+
+  constructor({ x, y, assetManager }) {
     this.x = x;
     this.y = y;
+    this.assetManager = assetManager;
   }
 
   getAssetName() {
@@ -21,8 +24,8 @@ export class Entity {
     };
   }
 
-  draw(canvas, assetManager) {
-    const asset = assetManager.getAsset(this.assetName);
+  draw(canvas) {
+    const asset = this.assetManager.getAsset(this.assetName);
     const drawX = this.x - asset.width / 2;
     const drawY = this.y - asset.height / 2;
 

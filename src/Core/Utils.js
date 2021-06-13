@@ -29,3 +29,7 @@ export class Rect {
     this.bottom = bottom;
   }
 }
+
+export async function sleep(time) {
+  await new Promise((r) => setTimeout(r, time));
+}
