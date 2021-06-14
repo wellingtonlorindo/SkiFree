@@ -11,6 +11,24 @@ Or deploy it locally by running:
 npm install
 npm run dev
 ```
+----------------------------------------------------------------------------------------------------------------------
+  ### UPDATE:
+  You can use docker to run the game if you want to. 
+  - Check https://www.docker.com/get-started and https://docs.docker.com/compose/ to learn how to install it.
+  ```
+  docker-compose build
+  docker-compose up -d
+  ```
+  Then access:
+  Development http://localhost:8080/
+  Production http://localhost:8083/
+
+  Or you can check my live version here:
+
+  https://skifree-js.herokuapp.com/
+
+----------------------------------------------------------------------------------------------------------------------
+
 
 There is no exact time limit on this challenge and we understand that everyone has varying levels of free time. We'd 
 rather you take the time and produce a solution up to your ability than rush and turn in a suboptimal challenge. Please 
@@ -24,22 +42,59 @@ quality of your code. We've provided the base code as a sample of what we expect
 design and architecture could be better. If you find a better way to do something, by all means, make it better! Your 
 solution can only gain from having a better foundation.
 
+  * **UPDATE:**
+
+    I added some improvements:
+    #### Code style and standard (eslint and editor config)
+      - Makes the code prettier and standardized
+    ```
+      npm run lint
+    ```
+
+    #### Dependency injection (constructor injection):
+      - Extending the application becomes easier
+      - Helps in Unit testing
+      - Helps to enable loose coupling, which is important in application programming
+
+    #### Factory method:
+      - Single Responsibility and Open/Closed principles (SOLID)
+
+    #### Destructuring assignment syntax
+      - Smart function parameters
+      - Helps to avoid confusing parameters
+
+    #### Docker
+      - Containers encapsulate everything an application needs to run, they allow applications to be shuttled easily between environments.
+
+
+
 * **Fix a bug:**
 
   There is a bug in the game. Well, at least one bug that we know of. Use the following bug report to debug the code
   and fix the root of the problem.
   * Steps to Reproduce:
     1. Load the game
-    1. Crash into an obstacle
-    1. Press the left arrow key
+    2. Crash into an obstacle
+    3. Press the left arrow key
   * Expected Result: The skier gets up and is facing to the left
   * Actual Result: Giant blizzard occurs causing the screen to turn completely white (or maybe the game just crashes!)
+  * **UPDATE:**
+
+    The game was trying to set an invalid direction to the skier. So I added validation for that on setDirection method.
   
 * **Write unit tests:**
 
   The base code has Jest, a unit testing framework, installed. Write some unit tests to ensure that the above mentioned
   bug does not come back.
+
+
+  * **UPDATE:**
   
+    You can run the unit tests using:
+  ```
+    npm test
+  ```
+
 * **Extend existing functionality:**
 
   We want to see your ability to extend upon a part of the game that already exists. Add in the ability for the skier to 
@@ -50,6 +105,13 @@ solution can only gain from having a better foundation.
     * Rocks can be jumped over
     * Trees can NOT be jumped over
   * Anything else you'd like to add to the skier's jumping ability, go for it!
+  
+  * **UPDATE:**
+  
+    Done!
+    - You can press **"a"** to make the skier give a small jump
+    - And you can go for the jump ramp
+
    
 * **Build something new:**
 
@@ -59,6 +121,14 @@ solution can only gain from having a better foundation.
   * The Rhino should appear after a set amount of time or distance skied and chase the skier, using the running assets
     we've provided to animate the rhino.
   * If the rhino catches the skier, it's game over and the rhino should eat the skier. 
+
+  * **UPDATE:**
+  
+    Not done! :(
+
+    I would love to add something new, but I didn't have enough time for that. 
+    As I am involved in a lot of projects as Tech Led on my current job and making a Leadership specialization at the same time, I gave my best here.
+
 
 * **Documentation:**
 
