@@ -134,6 +134,10 @@ solution can only gain from having a better foundation.
 
   * Update this README file with your comments about your work; what was done, what wasn't, features added & known bugs.
   * Provide a way for us to view the completed code and run it, either locally or through a cloud provider
+
+  * **UPDATE:**
+  
+    Done! Check the updates above.
   
 * **Be original:**  
   * This should go without saying but don’t copy someone else’s game implementation!
